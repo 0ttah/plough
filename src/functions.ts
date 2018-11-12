@@ -55,7 +55,7 @@ export function createCardMap(filePath: string, set: CardAPIObject) {
     new CardFileMapEntry(card.card_name.english, card.card_id));
   const cardMap = new CardFileMap();
   cardMap.add(cardEntries);
-
+  
 }
 
 export async function downloadImages() {
