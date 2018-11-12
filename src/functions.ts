@@ -36,9 +36,16 @@ export async function saveSet(set: CardAPIObject, filePath: string, getImages?: 
   const setFilePath = path.normalize(`${setFolderPath}set.json`);
   shell.mkdir("-p", setFolderPath);
   // save json file
-  const jsonString = JSON.stringify(set, undefined, 2);
-  fs.writeFile(setFilePath, jsonString, (err) => {
+  const setJSONString = JSON.stringify(set, undefined, 2);
+  fs.writeFile(setFilePath, setJSONString, (err) => {
     if (err) { throw err; }
+    console.log("Saved set.json");
+  });
+  // save cardmap
+  const cardMapJSONString = JSON.stringify(createCardMap(set), undefined, 2);
+  fs.writeFile(setFolderPath + "cardmap.json", cardMapJSONString, (err) => {
+    if (err) { throw err; }
+    console.log("Card file map created.");
   });
   // Save images
   if (getImages) {
@@ -50,12 +57,11 @@ export async function saveSet(set: CardAPIObject, filePath: string, getImages?: 
   return true;
 }
 
-export function createCardMap(filePath: string, set: CardAPIObject) {
+export function createCardMap(set: CardAPIObject) {
   const cardEntries = set.card_set.card_list.map<CardFileMapEntry>((card) =>
-    new CardFileMapEntry(card.card_name.english, card.card_id));
-  const cardMap = new CardFileMap();
-  cardMap.add(cardEntries);
-  
+    new CardFileMapEntry(card.card_name.english, card.card_id, card.card_type));
+  const cardMap = new CardFileMap().add(cardEntries);
+  return cardMap;
 }
 
 export async function downloadImages() {

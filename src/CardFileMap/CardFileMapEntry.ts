@@ -1,8 +1,9 @@
 export default class CardFileMapEntry {
   public cardName!: string;
   public cardId!: number;
-  constructor(cardName: string, cardId: number) {
-    Object.assign(this, { cardName, cardId });
+  public cardType!: string;
+  constructor(cardName: string, cardId: number, cardType: string) {
+    Object.assign(this, { cardName, cardId, cardType });
   }
 
   get fileName(): string {
