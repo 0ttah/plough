@@ -1,2 +1,2 @@
 # Plough 🚜
-WIP check [dev branch](https://github.com/ottah/plough/branch/dev)
+WIP check [dev branch](https://github.com/ottah/plough/tree/dev)
