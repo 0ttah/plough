@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node ./lib/cli.js"
   },
+  "bin": "./lib/cli.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
