@@ -1,5 +1,5 @@
 {
-  "name": "plough",
+  "name": "@open-artifact/plough",
   "version": "0.1.4",
   "main": "lib/cli.js",
   "scripts": {
