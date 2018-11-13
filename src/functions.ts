@@ -1,9 +1,11 @@
 import axios, { AxiosInstance } from "axios";
+import colors from "colors";
 import fs from "fs";
 import path from "path";
 import shell from "shelljs";
 import { CardFileMap, CardFileMapEntry } from "./CardFileMap/";
-import { CardAPIObject, CardSet } from "./CardSetInterfaces";
+import CardImage from "./CardImage";
+import { Card, CardAPIObject, CardSet } from "./CardSetInterfaces";
 import CDN, { CDNResponse } from "./CDN";
 
 // Get set CDN
@@ -29,8 +31,20 @@ export async function getSetJSON(cdn: CDN): Promise<CardAPIObject> {
     .then((response) => response.data);
 }
 
-export async function saveSet(set: CardAPIObject, filePath: string, getImages?: boolean): Promise<boolean> {
+export class SaveSetOptions {
+  public downloadImages: boolean = false;
+  public redownloadImages: boolean = false;
+  public fragmentCards: boolean = false;
+
+  constructor(options?: Partial<SaveSetOptions>) {
+    Object.assign(this, options);
+    console.log("HELLO", this, options);
+  }
+}
+
+export async function saveSet(set: CardAPIObject, filePath: string, options: SaveSetOptions = new SaveSetOptions()): Promise<boolean> {
   // Make folder for set
+  console.log("OPTIONS:", options);
   const setId = set.card_set.set_info.set_id;
   const setFolderPath = path.normalize(`${filePath}/sets/set-${setId}/`);
   const setFilePath = path.normalize(`${setFolderPath}set.json`);
@@ -47,13 +61,21 @@ export async function saveSet(set: CardAPIObject, filePath: string, getImages?: 
     if (err) { throw err; }
     console.log("Card file map created.");
   });
+  // make cards folder
+  if (options.downloadImages || options.fragmentCards) {
+    const cardsFolderPath = path.normalize(setFolderPath + "cards/");
+    shell.mkdir("-p", cardsFolderPath);
+    // create folder for each card id
+    set.card_set.card_list.slice(0, 10).forEach((card) => shell.mkdir(cardsFolderPath + card.card_id));
+    console.log("Card fragment folders created");
+  }
   // Save images
-  if (getImages) {
+  if (options.downloadImages) {
     // create cards folder
-    shell.mkdir("-p", setFolderPath + "/cards");
+    const cardPath = setFolderPath + "/cards";
+    await downloadAllCardsImages(set.card_set.card_list, cardPath);
   }
   // save fragments
-
   return true;
 }
 
@@ -64,8 +86,22 @@ export function createCardMap(set: CardAPIObject) {
   return cardMap;
 }
 
-export async function downloadImages() {
+export async function downloadAllCardsImages(cards: Card[], filePath: string) {
+  return Promise.all(cards.map(async (card) => downloadCardImages(card, filePath))).then((result) => {
+    console.log(colors.bold.green("Downloaded all images to " + filePath));
+    return result;
+  });
+}
 
+export async function downloadCardImages(card: Card, folderPath: string) {
+  const cardFolderPath = folderPath + "/" + card.card_id;
+  const images: CardImage[] = [
+    new CardImage("mini", ".png", card.mini_image.default),
+    new CardImage("large", ".png", card.large_image.default),
+    new CardImage("ingame", ".png", card.ingame_image.default),
+  ];
+
+  return Promise.all(images.map((img) => img.download(cardFolderPath)));
 }
 
 /**
