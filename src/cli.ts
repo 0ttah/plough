@@ -1,4 +1,4 @@
-#!/usr/bin/env node --no-warnings
+#!/usr/bin/env node
 import axios, { AxiosInstance } from "axios";
 import colors from "colors";
 import yargs from "yargs";
@@ -49,6 +49,8 @@ const yargv = yargs
   .example("d", "plough download -p -s 0 1 -o ./artifact/assets")
   .alias("d", "download")
   .alias("h", "help")
+  .alias("v", "version")
+  .version()
   .help()
   .argv;
 
