@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "main": "lib/cli.js",
   "scripts": {
-    "version": "npm run build && git add -A lib",
+    "version": "npm run build && git add -A lib -f",
     "postversion": "git push && git push --tags",
     "build": "tsc",
     "start": "node ./lib/cli.js"
