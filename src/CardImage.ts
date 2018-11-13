@@ -6,7 +6,7 @@ export default class ImageData {
   public url: string;
   public ext: string;
 
-  constructor (name: string, ext: string, url: string) {
+  constructor(name: string, ext: string, url: string) {
     this.name = name;
     this.url = url;
     this.ext = ext;
@@ -16,7 +16,7 @@ export default class ImageData {
     return this.name !== undefined && this.url !== undefined;
   }
 
-  public async download(folderPath: string): Promise<boolean> {
+  public async download(folderPath: string) {
     if (!this.isValid) {
       return false;
     }
@@ -27,13 +27,22 @@ export default class ImageData {
         url: this.url,
         responseType: "stream",
       })
-        .then((response) => {
-          response.data.pipe(fs.createWriteStream(filePath));
-          console.log(colors.magenta.bgBlack.italic(`- Downloaded ${filePath}`));
-          return true;
+        .then(async (response) => {
+          await writeImage(response.data, filePath);
+          // console.log(colors.magenta.bgBlack.italic(`- Downloaded ${filePath}`));
+          return response;
         });
     } else {
       return false;
     }
   }
+}
+
+function writeImage(data: any, filePath: string) {
+  return new Promise((resolve) => {
+    data.pipe(fs.createWriteStream(filePath)
+      .on("finish", () => {
+        resolve();
+      }));
+  });
 }

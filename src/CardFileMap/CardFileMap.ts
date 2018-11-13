@@ -1,3 +1,4 @@
+import fs from "fs";
 import { CardAPIObject } from "../CardSetInterfaces";
 import CardFileMapEntry from "./CardFileMapEntry";
 

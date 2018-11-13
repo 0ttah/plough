@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 import axios, { AxiosInstance } from "axios";
 import colors from "colors";
+import { emoji } from "node-emoji";
 import yargs from "yargs";
 import CDN from "./CDN";
-import { getSetCDN, getSetJSON, removeFolder, saveSet, SaveSetOptions, transformToJSON } from "./functions";
+import { getSetCDN, getSetJSON, removeFolder, saveSet, transformToJSON } from "./functions";
+import SaveSetOptions from "./SaveSetOptions";
 const yargv = yargs
   .command("download", "Download card set", {
     output: {
@@ -55,6 +57,12 @@ const yargv = yargs
   .alias("d", "download")
   .alias("h", "help")
   .alias("v", "version")
+  .option("log", {
+    alias: "l",
+    type: "boolean",
+    default: false,
+    describe: "Extra logging to the console about what is occuring",
+  })
   .version()
   .help()
   .argv;
@@ -67,25 +75,40 @@ function downloadCommandHandler(argv: yargs.Arguments): void {
     method: "get",
     transformResponse: [transformToJSON],
   });
-  setIds.map((id) => downloadSet(id, artifactAPI, argv));
-}
-
-async function downloadSet(setId: number, api: AxiosInstance, argv: yargs.Arguments): Promise<boolean> {
-  const outputPath = argv.output;
+  console.log("Ploughing", emoji.tractor);
   // Wipe folder if set
   if (argv.wipe) {
+    const outputPath = argv.output;
     console.log(`Wiping: ${outputPath}`);
     removeFolder(outputPath);
   }
-  const options = new SaveSetOptions({ downloadImages: argv.p, redownloadImages: argv.r, fragmentCards: argv.f });
+  // Wait for sets to be downloaded
+  const sets = setIds.map(async (id) => downloadSet(id, artifactAPI, argv));
+  Promise
+    .all(sets)
+    .then((values) => {
+      const msg = "Finished ploughing";
+      console.log(msg, emoji.tractor);
+    });
+
+}
+
+async function downloadSet(setId: number, api: AxiosInstance, argv: yargs.Arguments) {
+  const outputPath = argv.output;
+  const options = new SaveSetOptions({ downloadImages: argv.p, redownloadImages: argv.r, fragmentCards: argv.f, log: argv.l });
   // Make request for sets
-  const setUrl = await getSetCDN(api, setId)
+  return await getSetCDN(api, setId)
     .then((cdn) => {
-      getSetJSON(cdn)
+      return getSetJSON(cdn)
         .then((set) => saveSet(set, outputPath, options))
-        .then((value) => console.log(`Success! Set #${setId} downloaded.`))
-        .catch((err) => console.log("Error getting set " + cdn.setId, err));
+        .then((value) => {
+          console.log(colors.blue(setId + ":"), `Success! Set #${setId} downloaded.`);
+          return value;
+        })
+        .catch((err) => {
+          console.log("Error getting set " + cdn.setId, err);
+          return false;
+        });
     })
-    .catch((err) => console.log(err));
-  return true;
+    .catch((err) => false);
 }

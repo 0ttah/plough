@@ -1,15 +1,16 @@
-import fs from "fs";
 import path from "path";
 import { Card } from "./CardSetInterfaces";
+import writeFile from "./writeFile";
 
-export async function fragmentCard(card: Card, setPathFolder: string) {
+export async function fragmentCard(card: Card, setPathFolder: string, log?: boolean) {
   const json: string = JSON.stringify(card, undefined, 2);
   const filePath = path.normalize(setPathFolder + "/" + card.card_id + "/" + "card.json");
-  return await fs.writeFile(filePath, json, null, (err) => {
-    if (err) {
-      throw new Error("Unable to write fragment " + card.card_name.english + " to " + filePath);
+
+  return await writeFile(filePath, json, {
+    encoding: "utf8",
+  }, () => {
+    if (log) {
+      console.log(`Saved card fragment ${card.card_name.english}`);
     }
-    console.log(`Saved card fragment ${card.card_name}`);
-    return;
   });
 }
