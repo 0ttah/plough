@@ -36,7 +36,7 @@ export class SaveSetOptions {
   public redownloadImages: boolean = false;
   public fragmentCards: boolean = false;
 
-  constructor(options?: Partial<SaveSetOptions>) {
+  constructor (options?: Partial<SaveSetOptions>) {
     Object.assign(this, options);
     console.log("HELLO", this, options);
   }
@@ -115,5 +115,6 @@ export function transformToJSON(data: string): Promise<object> {
 }
 
 export function removeFolder(filePath: string) {
-  shell.rm("-rf", filePath);
+  if (filePath === '/')
+    shell.rm("-rf", filePath);
 }
