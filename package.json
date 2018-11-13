@@ -1,6 +1,6 @@
 {
   "name": "plough",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "lib/cli.js",
   "scripts": {
     "version": "npm run build && git add -A .",
