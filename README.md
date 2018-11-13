@@ -14,11 +14,11 @@ plough download
 ## Examples
 Download set 0 & 1 and output to `./assets/`.
 ```
-plough -s 0 1 -o ./assets/
+plough download -s 0 1 -o ./assets/
 ```
 Download set 0 & 1 and all images
 ```bash
-plough -s 0 1 -p -o ./folder/
+plough download -s 0 1 -p -o ./folder/
 ```
 
 ## Output (based on options):
