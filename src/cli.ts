@@ -4,6 +4,7 @@ import colors from "colors";
 import { emoji } from "node-emoji";
 import yargs from "yargs";
 import CDN from "./CDN";
+import downloadCommandHandler from "./commands/download/downloadCommandHandler";
 import { getSetCDN, getSetJSON, removeFolder, saveSet, transformToJSON } from "./functions";
 import SaveSetOptions from "./SaveSetOptions";
 const yargv = yargs
@@ -66,49 +67,3 @@ const yargv = yargs
   .version()
   .help()
   .argv;
-
-function downloadCommandHandler(argv: yargs.Arguments): void {
-  const setIds: number[] = argv.s;
-
-  const artifactAPI = axios.create({
-    baseURL: "https://playartifact.com/cardset/",
-    method: "get",
-    transformResponse: [transformToJSON],
-  });
-  console.log("Ploughing", emoji.tractor);
-  // Wipe folder if set
-  if (argv.wipe) {
-    const outputPath = argv.output;
-    console.log(`Wiping: ${outputPath}`);
-    removeFolder(outputPath);
-  }
-  // Wait for sets to be downloaded
-  const sets = setIds.map(async (id) => downloadSet(id, artifactAPI, argv));
-  Promise
-    .all(sets)
-    .then((values) => {
-      const msg = "Finished ploughing";
-      console.log(msg, emoji.tractor);
-    });
-
-}
-
-async function downloadSet(setId: number, api: AxiosInstance, argv: yargs.Arguments) {
-  const outputPath = argv.output;
-  const options = new SaveSetOptions({ downloadImages: argv.p, redownloadImages: argv.r, fragmentCards: argv.f, log: argv.l });
-  // Make request for sets
-  return await getSetCDN(api, setId)
-    .then((cdn) => {
-      return getSetJSON(cdn)
-        .then((set) => saveSet(set, outputPath, options))
-        .then((value) => {
-          console.log(colors.blue(setId + ":"), `Success! Set #${setId} downloaded.`);
-          return value;
-        })
-        .catch((err) => {
-          console.log("Error getting set " + cdn.setId, err);
-          return false;
-        });
-    })
-    .catch((err) => false);
-}
