@@ -2,9 +2,31 @@
 
 Plough is a command line tool for downloading card sets & images from the Artifact API. Using this tool you can cache or webpack all API assets locally to speed up load times, instead of making mutliple requests to the API client/server side.
 
+Each set folder contains the following files (depending on your options):
+```
+assets/ #
+│
+└───sets
+    └───set-0
+        │   set.json # card set
+        │   cardmap.json  # map of cardnames-id-filename (filename is used by artifactdb)
+        └───cards
+            └───1000
+            |   |   card.json   # individual card
+            |   |   ingame.png
+            |   |   large.png
+            |   |   mini.png
+            └───1001
+            └───...
+```
 ## Install
 ```
 npm i -g plough
+```
+
+## Usage
+```
+plough download
 ```
 
 ## Examples
