@@ -3,7 +3,7 @@ Plough is a command line tool for downloading card sets & images from the Artifa
 
 ## Install
 ```
-npm i -g plough
+npm i -g @open-artifact/plough
 ```
 
 ## Usage
