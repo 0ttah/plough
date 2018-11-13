@@ -21,12 +21,12 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ottah/plough.git"
+    "url": "git+https://github.com/open-artifact/plough.git"
   },
   "bugs": {
-    "url": "https://github.com/ottah/plough/issues"
+    "url": "https://github.com/open-artifact/plough/issues"
   },
-  "homepage": "https://github.com/ottah/plough#readme",
+  "homepage": "https://github.com/open-artifact/plough#readme",
   "description": "",
   "devDependencies": {
     "@types/node-emoji": "^1.8.0",
