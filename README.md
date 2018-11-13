@@ -1,5 +1,4 @@
 # Plough 🚜
-
 Plough is a command line tool for downloading card sets & images from the Artifact API. Using this tool you can cache or webpack all API assets locally to speed up load times, instead of making mutliple requests to the API client/server side.
 
 ## Install
@@ -57,4 +56,3 @@ You can type **--help** or **[command] --help** to get help information & exampl
 | -o      | --output     | download | string   | The output folder for downloading sets.                                                              |
 | -r      | --redownload | download | boolean  | If true, pictures will be redownloaded from the api even if they already exist in the output folder. |
 | --wipe  |              | download | boolean  | If true, the output folder will be removed before downloading and saving to that location.           |
-
