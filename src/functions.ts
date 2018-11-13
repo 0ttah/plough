@@ -7,6 +7,7 @@ import { CardFileMap, CardFileMapEntry } from "./CardFileMap/";
 import CardImage from "./CardImage";
 import { Card, CardAPIObject, CardSet } from "./CardSetInterfaces";
 import CDN, { CDNResponse } from "./CDN";
+import { fragmentCard } from "./fragmentCards";
 
 // Get set CDN
 export async function getSetCDN(api: AxiosInstance, id: number): Promise<CDN> {
@@ -36,18 +37,17 @@ export class SaveSetOptions {
   public redownloadImages: boolean = false;
   public fragmentCards: boolean = false;
 
-  constructor (options?: Partial<SaveSetOptions>) {
+  constructor(options?: Partial<SaveSetOptions>) {
     Object.assign(this, options);
-    console.log("HELLO", this, options);
   }
 }
 
 export async function saveSet(set: CardAPIObject, filePath: string, options: SaveSetOptions = new SaveSetOptions()): Promise<boolean> {
   // Make folder for set
-  console.log("OPTIONS:", options);
+  console.log("Working in " + filePath);
   const setId = set.card_set.set_info.set_id;
-  const setFolderPath = path.normalize(`${filePath}/sets/set-${setId}/`);
-  const setFilePath = path.normalize(`${setFolderPath}set.json`);
+  const setFolderPath = path.normalize(`${filePath}/sets/set-${setId}`);
+  const setFilePath = path.normalize(`${setFolderPath}/set.json`);
   shell.mkdir("-p", setFolderPath);
   // save json file
   const setJSONString = JSON.stringify(set, undefined, 2);
@@ -56,34 +56,34 @@ export async function saveSet(set: CardAPIObject, filePath: string, options: Sav
     console.log("Saved set.json");
   });
   // save cardmap
-  const cardMapJSONString = JSON.stringify(createCardMap(set), undefined, 2);
-  fs.writeFile(setFolderPath + "cardmap.json", cardMapJSONString, (err) => {
+  const cardMapJSONString = JSON.stringify(CardFileMap.createMap(set), undefined, 2);
+  const jobs: Array<Promise<any>> = [];
+  fs.writeFile(setFolderPath + "/cardmap.json", cardMapJSONString, (err) => {
     if (err) { throw err; }
     console.log("Card file map created.");
   });
   // make cards folder
   if (options.downloadImages || options.fragmentCards) {
-    const cardsFolderPath = path.normalize(setFolderPath + "cards/");
+    const cardsFolderPath = path.normalize(setFolderPath + "/cards");
     shell.mkdir("-p", cardsFolderPath);
     // create folder for each card id
-    set.card_set.card_list.slice(0, 10).forEach((card) => shell.mkdir(cardsFolderPath + card.card_id));
+    console.log("Creating card fragment folders");
+    jobs.concat(set.card_set.card_list.slice(0, 10).map(async (card) => shell.mkdir(cardsFolderPath + "/" + card.card_id)));
     console.log("Card fragment folders created");
   }
   // Save images
   if (options.downloadImages) {
     // create cards folder
     const cardPath = setFolderPath + "/cards";
-    await downloadAllCardsImages(set.card_set.card_list, cardPath);
+    jobs.concat(downloadAllCardsImages(set.card_set.card_list, cardPath));
+  }
+  if (options.fragmentCards) {
+    // Fragment cards
+    jobs.concat(set.card_set.card_list.map(async (card) => fragmentCard(card, setFolderPath + "/cards")));
   }
   // save fragments
-  return true;
-}
-
-export function createCardMap(set: CardAPIObject) {
-  const cardEntries = set.card_set.card_list.map<CardFileMapEntry>((card) =>
-    new CardFileMapEntry(card.card_name.english, card.card_id, card.card_type));
-  const cardMap = new CardFileMap().add(cardEntries);
-  return cardMap;
+  console.log(colors.bold.magenta("Waiting for jobs to complete for set #" + setId));
+  return await Promise.all(jobs).then(() => true);
 }
 
 export async function downloadAllCardsImages(cards: Card[], filePath: string) {
@@ -115,6 +115,7 @@ export function transformToJSON(data: string): Promise<object> {
 }
 
 export function removeFolder(filePath: string) {
-  if (filePath === '/')
+  if (filePath !== "/") {
     shell.rm("-rf", filePath);
+  }
 }

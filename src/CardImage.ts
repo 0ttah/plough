@@ -33,7 +33,6 @@ export default class ImageData {
           return true;
         });
     } else {
-      console.log(`Skipping ${this.name}`);
       return false;
     }
   }

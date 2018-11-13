@@ -4,12 +4,11 @@ import colors from "colors";
 import yargs from "yargs";
 import CDN from "./CDN";
 import { getSetCDN, getSetJSON, removeFolder, saveSet, SaveSetOptions, transformToJSON } from "./functions";
-console.clear();
 const yargv = yargs
   .command("download", "Download card set", {
     output: {
       alias: "o",
-      default: "./sets",
+      default: "./assets/",
       describe: "Output location",
       type: "string",
     },
@@ -29,6 +28,12 @@ const yargv = yargs
       default: false,
       describe: "Redownload images if they exist on the filesystem.",
       alias: "r",
+      type: "boolean",
+    },
+    fragment: {
+      default: false,
+      describe: "Split cards into JSON fragments and place them into card folders.",
+      alias: "f",
       type: "boolean",
     },
     wipe: {
@@ -66,7 +71,6 @@ function downloadCommandHandler(argv: yargs.Arguments): void {
 }
 
 async function downloadSet(setId: number, api: AxiosInstance, argv: yargs.Arguments): Promise<boolean> {
-  console.log(argv);
   const outputPath = argv.output;
   // Wipe folder if set
   if (argv.wipe) {
@@ -80,7 +84,7 @@ async function downloadSet(setId: number, api: AxiosInstance, argv: yargs.Argume
       getSetJSON(cdn)
         .then((set) => saveSet(set, outputPath, options))
         .then((value) => console.log(`Success! Set #${setId} downloaded.`))
-        .catch((err) => console.log("Error getting set " + cdn.setId));
+        .catch((err) => console.log("Error getting set " + cdn.setId, err));
     })
     .catch((err) => console.log(err));
   return true;
