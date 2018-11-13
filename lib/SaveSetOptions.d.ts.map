@@ -1,0 +1,1 @@
+{"version":3,"file":"SaveSetOptions.d.ts","sourceRoot":"","sources":["../src/SaveSetOptions.ts"],"names":[],"mappings":"AACA,MAAM,CAAC,OAAO,OAAO,cAAc;IAC1B,cAAc,EAAE,OAAO,CAAS;IAChC,gBAAgB,EAAE,OAAO,CAAS;IAClC,aAAa,EAAE,OAAO,CAAS;IAC/B,GAAG,EAAE,OAAO,CAAS;gBAEhB,OAAO,CAAC,EAAE,OAAO,CAAC,cAAc,CAAC;CAG9C"}
