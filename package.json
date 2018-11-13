@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "main": "lib/cli.js",
   "scripts": {
-    "version": "npm run build && git add -A .",
+    "version": "npm run build && git add -A lib",
     "postversion": "git push && git push --tags",
     "build": "tsc",
     "start": "node ./lib/cli.js"
@@ -27,9 +27,6 @@
     "@types/yargs": "^12.0.1",
     "typescript": "^3.1.6"
   },
-  "files": [
-    "./lib"
-  ],
   "dependencies": {
     "@types/node": "^10.12.5",
     "axios": "^0.18.0",
