@@ -1,8 +1,9 @@
 import { AxiosInstance } from "axios";
 import colors from "colors";
 import yargs = require("yargs");
-import { getSetCDN, getSetJSON, saveSet } from "../../functions";
+import { getSetCDN, getSetJSON } from "../../functions";
 import SaveSetOptions from "../../SaveSetOptions";
+import saveSet from "./saveSet";
 
 export default async function downloadSet(setId: number, api: AxiosInstance, argv: yargs.Arguments) {
   const outputPath = argv.output;

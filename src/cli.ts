@@ -1,12 +1,8 @@
 #!/usr/bin/env node
-import axios, { AxiosInstance } from "axios";
 import colors from "colors";
-import { emoji } from "node-emoji";
 import yargs from "yargs";
-import CDN from "./CDN";
 import downloadCommandHandler from "./commands/download/downloadCommandHandler";
-import { getSetCDN, getSetJSON, removeFolder, saveSet, transformToJSON } from "./functions";
-import SaveSetOptions from "./SaveSetOptions";
+
 const yargv = yargs
   .command("download", "Download card set", {
     output: {

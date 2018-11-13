@@ -1,6 +1,6 @@
 import path from "path";
 import { Card } from "./CardSetInterfaces";
-import writeFile from "./writeFile";
+import { writeFile } from "./functions";
 
 export async function fragmentCard(card: Card, setPathFolder: string, log?: boolean) {
   const json: string = JSON.stringify(card, undefined, 2);
