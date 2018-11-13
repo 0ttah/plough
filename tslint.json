@@ -16,7 +16,8 @@
     "arrow-return-shorthand": true,
     "curly": true,
     "semicolon": true,
-    "member-ordering": false
+    "member-ordering": true,
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": [],
   "[handlebars]": {

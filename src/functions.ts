@@ -1,10 +1,15 @@
 import axios, { AxiosInstance } from "axios";
+import colors from "colors";
 import fs from "fs";
+import emoji from "node-emoji";
 import path from "path";
 import shell from "shelljs";
 import { CardFileMap, CardFileMapEntry } from "./CardFileMap/";
-import { CardAPIObject, CardSet } from "./CardSetInterfaces";
+import CardImage from "./CardImage";
+import { Card, CardAPIObject, CardSet } from "./CardSetInterfaces";
 import CDN, { CDNResponse } from "./CDN";
+import { fragmentCard } from "./fragmentCards";
+import SaveSetOptions from "./SaveSetOptions";
 
 // Get set CDN
 export async function getSetCDN(api: AxiosInstance, id: number): Promise<CDN> {
@@ -29,44 +34,25 @@ export async function getSetJSON(cdn: CDN): Promise<CardAPIObject> {
     .then((response) => response.data);
 }
 
-export async function saveSet(set: CardAPIObject, filePath: string, getImages?: boolean): Promise<boolean> {
-  // Make folder for set
-  const setId = set.card_set.set_info.set_id;
-  const setFolderPath = path.normalize(`${filePath}/sets/set-${setId}/`);
-  const setFilePath = path.normalize(`${setFolderPath}set.json`);
-  shell.mkdir("-p", setFolderPath);
-  // save json file
-  const setJSONString = JSON.stringify(set, undefined, 2);
-  fs.writeFile(setFilePath, setJSONString, (err) => {
-    if (err) { throw err; }
-    console.log("Saved set.json");
+export function writeFile(filePath: string, data: string, options: fs.WriteFileOptions, callback: () => void): Promise<any> {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(filePath, data, options, (err) => {
+      if (err) {
+        reject(false);
+      }
+      callback();
+      resolve(true);
+    });
   });
-  // save cardmap
-  const cardMapJSONString = JSON.stringify(createCardMap(set), undefined, 2);
-  fs.writeFile(setFolderPath + "cardmap.json", cardMapJSONString, (err) => {
-    if (err) { throw err; }
-    console.log("Card file map created.");
-  });
-  // Save images
-  if (getImages) {
-    // create cards folder
-    shell.mkdir("-p", setFolderPath + "/cards");
-  }
-  // save fragments
-
-  return true;
 }
 
-export function createCardMap(set: CardAPIObject) {
-  const cardEntries = set.card_set.card_list.map<CardFileMapEntry>((card) =>
-    new CardFileMapEntry(card.card_name.english, card.card_id, card.card_type));
-  const cardMap = new CardFileMap().add(cardEntries);
-  return cardMap;
+export function makeCardFolders(folderPath: string, ids: number[]) {
+  // create folder for each card id
+  console.log("Creating card fragment folders");
+  ids.map(async (id) => shell.mkdir(folderPath + "/" + id));
+  console.log("Card fragment folders created");
 }
 
-export async function downloadImages() {
-
-}
 
 /**
  * Transforms JSON response to an object.
@@ -79,5 +65,7 @@ export function transformToJSON(data: string): Promise<object> {
 }
 
 export function removeFolder(filePath: string) {
-  shell.rm("-rf", filePath);
+  if (filePath !== "/") {
+    shell.rm("-rf", filePath);
+  }
 }
