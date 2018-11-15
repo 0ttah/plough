@@ -1,6 +1,6 @@
 {
   "name": "@open-artifact/plough",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "lib/cli.js",
   "scripts": {
     "version": "npm run build && git add -A lib -f",
