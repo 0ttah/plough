@@ -4,7 +4,7 @@ import yargs from "yargs";
 import downloadCommandHandler from "./commands/download/downloadCommandHandler";
 
 const yargv = yargs
-  .command("download", "Download card set", {
+  .command(["download", "d"], "Download card set", {
     output: {
       alias: "o",
       default: "./assets/",
@@ -51,7 +51,6 @@ const yargv = yargs
   })
   .showHelpOnFail(true)
   .example("d", "plough download -p -s 0 1 -o ./artifact/assets")
-  .alias("d", "download")
   .alias("h", "help")
   .alias("v", "version")
   .option("log", {
