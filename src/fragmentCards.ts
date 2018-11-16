@@ -1,5 +1,5 @@
+import { Card } from "@open-artifact/api-types";
 import path from "path";
-import { Card } from "./CardSetInterfaces";
 import { writeFile } from "./functions";
 
 export async function fragmentCard(card: Card, setPathFolder: string, log?: boolean) {

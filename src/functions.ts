@@ -1,3 +1,4 @@
+import { Card, CardAPIObject, CardSet } from "@open-artifact/api-types";
 import axios, { AxiosInstance } from "axios";
 import colors from "colors";
 import fs from "fs";
@@ -6,7 +7,6 @@ import path from "path";
 import shell from "shelljs";
 import { CardFileMap, CardFileMapEntry } from "./CardFileMap/";
 import CardImage from "./CardImage";
-import { Card, CardAPIObject, CardSet } from "./CardSetInterfaces";
 import CDN, { CDNResponse } from "./CDN";
 import { fragmentCard } from "./fragmentCards";
 import SaveSetOptions from "./SaveSetOptions";
@@ -52,7 +52,6 @@ export function makeCardFolders(folderPath: string, ids: number[]) {
   ids.map(async (id) => shell.mkdir(folderPath + "/" + id));
   console.log("Card fragment folders created");
 }
-
 
 /**
  * Transforms JSON response to an object.

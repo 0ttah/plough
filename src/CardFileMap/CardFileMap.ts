@@ -1,5 +1,5 @@
+import { CardAPIObject } from "@open-artifact/api-types";
 import fs from "fs";
-import { CardAPIObject } from "../CardSetInterfaces";
 import CardFileMapEntry from "./CardFileMapEntry";
 
 export default class CardFileMap {

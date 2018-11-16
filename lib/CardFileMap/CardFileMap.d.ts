@@ -1,4 +1,4 @@
-import { CardAPIObject } from "../CardSetInterfaces";
+import { CardAPIObject } from "@open-artifact/api-types";
 import CardFileMapEntry from "./CardFileMapEntry";
 export default class CardFileMap {
     entries: CardFileMapEntry[];

@@ -1,7 +1,7 @@
 /// <reference types="node" />
+import { CardAPIObject } from "@open-artifact/api-types";
 import { AxiosInstance } from "axios";
 import fs from "fs";
-import { CardAPIObject } from "./CardSetInterfaces";
 import CDN from "./CDN";
 export declare function getSetCDN(api: AxiosInstance, id: number): Promise<CDN>;
 export declare function getSetJSON(cdn: CDN): Promise<CardAPIObject>;

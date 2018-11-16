@@ -1,8 +1,8 @@
+import { CardAPIObject } from "@open-artifact/api-types";
 import colors from "colors";
 import path from "path";
 import shell from "shelljs";
 import { CardFileMap } from "../../CardFileMap";
-import { CardAPIObject } from "../../CardSetInterfaces";
 import { fragmentCard } from "../../fragmentCards";
 import { writeFile } from "../../functions";
 import SaveSetOptions from "../../SaveSetOptions";
