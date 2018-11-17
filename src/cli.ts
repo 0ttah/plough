@@ -53,11 +53,11 @@ const yargv = yargs
   .example("d", "plough download -p -s 0 1 -o ./artifact/assets")
   .alias("h", "help")
   .alias("v", "version")
-  .option("log", {
+  .option("language", {
     alias: "l",
-    type: "boolean",
-    default: false,
-    describe: "Extra logging to the console about what is occuring",
+    type: "string",
+    default: "english",
+    describe: "Language of card.",
   })
   .version()
   .help()
