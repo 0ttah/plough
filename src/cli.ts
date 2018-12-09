@@ -2,8 +2,18 @@
 import colors from "colors";
 import yargs from "yargs";
 import downloadCommandHandler from "./commands/download/downloadCommandHandler";
-
+import { transformCommandHandler } from "./commands/transform/index";
 const yargv = yargs
+  .command(["transform", "t"], "Transform card set", {
+    script: {
+      alias: "s",
+      required: true,
+    },
+  },
+    (argv) => {
+      console.log(argv);
+      transformCommandHandler(argv);
+    })
   .command(["download", "d"], "Download card set", {
     output: {
       alias: "o",
