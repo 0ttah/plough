@@ -1,15 +1,13 @@
-import { TransformPlugin } from "./Plugins";
+import { Card, CardSet } from "@open-artifact/api-types";
 
-class ArtifactDBTransform implements TransformPlugin {
-  public transformSet(set: any) {
-    throw new Error("Method not implemented.");
-  }
-  public transformCard(card: any) {
-    const newCard = {
-      name: card.card_name,
-    };
-    console.log("Modifying card", card.card_name);
-    return newCard;
-  }
+export function transformSet(set: CardSet) {
+  throw new Error("Not implemented");
+}
 
+export function transformFragment(fragment: Card) {
+  const newFragment = {
+    name: fragment.card_name,
+  };
+  console.log("Modifying card", fragment.card_name);
+  return newFragment;
 }

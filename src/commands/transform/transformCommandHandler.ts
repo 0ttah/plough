@@ -1,12 +1,19 @@
+import { Card, LanguageOptionText } from "@open-artifact/api-types";
 import yargs from "yargs";
+// import ArtifactDBTransform from "../../exampleScript";
 import { TransformPlugin } from "../../Plugins";
 
 export default function transformCommandHandler(argv: yargs.Arguments) {
-  const script: TransformPlugin = require(argv.script);
-  const test = {
-    a: 2,
-  };
-  const x = script.transformCard(test);
+  import(argv.s)
+    .then((plugin) => {
+      const { transformSet, transformFragment, Test } = plugin;
 
-  console.log(x);
+      console.log("Scripted loaded");
+      transformFragment({ card_name: "Hello" });
+      console.log(new Test().age);
+      console.log("default", plugin.default);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 }
