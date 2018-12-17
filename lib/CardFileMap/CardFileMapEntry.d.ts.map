@@ -1,1 +1,0 @@
-{"version":3,"file":"CardFileMapEntry.d.ts","sourceRoot":"","sources":["../../src/CardFileMap/CardFileMapEntry.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,gBAAgB;IAC5B,QAAQ,EAAG,MAAM,CAAC;IAClB,MAAM,EAAG,MAAM,CAAC;IAChB,QAAQ,EAAG,MAAM,CAAC;gBACb,QAAQ,EAAE,MAAM,EAAE,MAAM,EAAE,MAAM,EAAE,QAAQ,EAAE,MAAM;aAI1D,QAAQ,EAAI,MAAM;CAWvB"}
