@@ -2,8 +2,9 @@ import axios from "axios";
 import colors from "colors";
 import { emoji } from "node-emoji";
 import yargs = require("yargs");
-import { removeFolder, transformToJSON } from "../../functions";
-import downloadSet from "../../functions/downloadSet";
+import { removeFolder } from "../../functions";
+import downloadSet from "./downloadSet";
+import { transformToJSON } from "./transformToJSON";
 
 export const command = ["download", "d"];
 export const desc = "Download card sets";
@@ -51,6 +52,7 @@ export const builder = {
 };
 
 export function handler(argv: yargs.Arguments): void {
+  // @TODO Find a option that limits -s to an arroy of numbers so this check can be removed.
   const valid = argv.sets.every((x: any) => typeof x === "number");
   if (!valid) {
     console.log(colors.red.bold.underline("Sets must be numbers!"));
