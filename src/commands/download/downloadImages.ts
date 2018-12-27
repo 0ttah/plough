@@ -2,6 +2,7 @@ import { Card } from "@open-artifact/api-types";
 import colors from "colors";
 import CardImage from "../../CardImage";
 
+// Download each card's images
 export async function downloadAllCardsImages(cards: Card[], filePath: string) {
   const promises = cards.map(async (card) => downloadCardImages(card, filePath));
 
@@ -13,6 +14,7 @@ export async function downloadAllCardsImages(cards: Card[], filePath: string) {
     });
 }
 
+// Download all the images for a card
 export async function downloadCardImages(card: Card, folderPath: string) {
   const cardFolderPath = folderPath + "/" + card.card_id;
   const images: CardImage[] = [

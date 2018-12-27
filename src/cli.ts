@@ -3,7 +3,7 @@ import colors from "colors";
 import yargs from "yargs";
 import { transformCommandHandler } from "./commands/transform/index";
 const yargv = yargs
-  .commandDir("commands")
+  .commandDir("commands", { recurse: true })
   .demandCommand()
   .showHelpOnFail(true)
   .example("d", "plough download -p -s 0 1 -o ./artifact/assets")

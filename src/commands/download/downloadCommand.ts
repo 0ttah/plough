@@ -2,7 +2,7 @@ import axios from "axios";
 import colors from "colors";
 import { emoji } from "node-emoji";
 import yargs = require("yargs");
-import { removeFolder } from "../../functions";
+import { removeFolder } from "../utils";
 import downloadSet from "./downloadSet";
 import { transformToJSON } from "./transformToJSON";
 

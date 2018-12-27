@@ -3,12 +3,9 @@ import colors from "colors";
 import path from "path";
 import shell from "shelljs";
 import { CardFileMap } from "../../CardFileMap";
-import { fragmentCard } from "../../fragmentCards";
-import { writeFile } from "../../functions";
+import { fragmentCard, makeCardFolders, writeFile } from "../utils";
 import { downloadAllCardsImages } from "./downloadImages";
 import SaveSetOptions from "./SaveSetOptions";
-
-import { makeCardFolders } from "../../functions";
 
 export default async function saveSet(set: CardAPIObject, filePath: string, options: SaveSetOptions = new SaveSetOptions()) {
   // Make folder for set

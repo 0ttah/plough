@@ -1,6 +1,6 @@
 import { Card } from "@open-artifact/api-types";
 import path from "path";
-import { writeFile } from "./functions";
+import { writeFile } from "./writeFile";
 
 export async function fragmentCard(card: Card, setPathFolder: string, log?: boolean) {
   const json: string = JSON.stringify(card, undefined, 2);

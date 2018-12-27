@@ -1,7 +1,7 @@
 import { Card, LanguageOptionText } from "@open-artifact/api-types";
 import yargs from "yargs";
 // import ArtifactDBTransform from "../../exampleScript";
-import { TransformPlugin } from "../../Plugins";
+import { TransformPlugin } from "../../plugins";
 
 export default function transformCommandHandler(argv: yargs.Arguments) {
   import(argv.s)
