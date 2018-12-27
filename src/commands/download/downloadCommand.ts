@@ -46,7 +46,7 @@ export const builder = {
   language: {
     alias: "l",
     type: "string",
-    default: "english",
+    default: "default",
     describe: "Language of card.",
   },
 };

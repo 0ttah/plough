@@ -8,7 +8,7 @@ import SaveSetOptions from "./SaveSetOptions";
 
 export default async function downloadSet(setId: number, api: AxiosInstance, argv: yargs.Arguments) {
   const outputPath = argv.output;
-  const options = new SaveSetOptions({ downloadImages: argv.p, redownloadImages: argv.r, fragmentCards: argv.f, log: argv.l });
+  const options = new SaveSetOptions({ language: argv.language, downloadImages: argv.p, redownloadImages: argv.r, fragmentCards: argv.f, log: argv.l });
   // Make request for sets
   return await getSetCDN(api, setId)
     .then((cdn) => {

@@ -1,4 +1,4 @@
-import { CardAPIObject } from "@open-artifact/api-types";
+import { CardAPIObject, LanguageOptionLargeImage } from "@open-artifact/api-types";
 import colors from "colors";
 import path from "path";
 import shell from "shelljs";
@@ -13,7 +13,7 @@ export default async function saveSet(set: CardAPIObject, filePath: string, opti
   const setFolderPath = path.normalize(`${filePath}/sets/set-${setId}`);
   const setFilePath = path.normalize(`${setFolderPath}/set.json`);
   shell.mkdir("-p", setFolderPath);
-
+  console.log(colors.bgRed(options.language));
   // save set & card map files
   const writeSetFile = writeFile(setFilePath, JSON.stringify(set, undefined, 2), null, () => {
     console.log(colors.blue(setId + ":"), "Saved set.json");
@@ -33,7 +33,7 @@ export default async function saveSet(set: CardAPIObject, filePath: string, opti
   if (options.downloadImages) {
     // create cards folder
     const cardPath = setFolderPath + "/cards";
-    const downloadImageJob = downloadAllCardsImages(set.card_set.card_list, cardPath);
+    const downloadImageJob = downloadAllCardsImages(set.card_set.card_list, cardPath, options.language as keyof LanguageOptionLargeImage);
     jobs = [...jobs, downloadImageJob];
   }
   if (options.fragmentCards) {
