@@ -1,8 +1,8 @@
 import axios from "axios";
 import { emoji } from "node-emoji";
 import yargs = require("yargs");
-import { removeFolder, transformToJSON } from "../../functions";
-import downloadSet from "./downloadSet";
+import { removeFolder, transformToJSON } from "../functions";
+import downloadSet from "../functions/downloadSet";
 
 export default function downloadCommandHandler(argv: yargs.Arguments): void {
   const setIds: number[] = argv.s;

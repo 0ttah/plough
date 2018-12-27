@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import colors from "colors";
 import yargs from "yargs";
-import downloadCommandHandler from "./commands/download/downloadCommandHandler";
+import downloadCommandHandler from "./commands/download";
 import { transformCommandHandler } from "./commands/transform/index";
 const yargv = yargs
   .command(["transform", "t"], "Transform card set", {
