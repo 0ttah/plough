@@ -6,7 +6,6 @@ import yargs from "yargs";
 import { TransformPlugin } from "../../plugins/TransformPlugin";
 import { removeFolder } from "../utils";
 import downloadSet from "./downloadSet";
-import { transformToJSON } from "./transformToJSON";
 
 export const command = ["download", "d"];
 export const desc = "Download card sets";
@@ -74,7 +73,7 @@ export async function handler(argv: yargs.Arguments) {
   const artifactAPI = axios.create({
     baseURL: "https://playartifact.com/cardset/",
     method: "get",
-    transformResponse: [transformToJSON],
+    transformResponse: (data: string) => JSON.parse(data),
   });
   console.log("Ploughing", emoji.tractor);
   // Wipe folder if set
@@ -99,11 +98,10 @@ export async function handler(argv: yargs.Arguments) {
 
   Promise
     .all(sets)
-    .then((results) => {
+    .then(() => {
       const msg = "Finished ploughing";
       console.log(msg, emoji.tractor);
-    },
-    );
+    });
 
 }
 
