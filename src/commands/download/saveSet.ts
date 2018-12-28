@@ -7,7 +7,7 @@ import { fragmentCard, makeCardFolders, writeFile } from "../utils";
 import { downloadAllCardsImages } from "./downloadImages";
 import SaveSetOptions from "./SaveSetOptions";
 
-export default async function saveSet(set: CardAPIObject, filePath: string, options: SaveSetOptions = new SaveSetOptions()) {
+export default async function saveSet(set: CardAPIObject, filePath: string, options: SaveSetOptions = new SaveSetOptions()): Promise<boolean> {
   // Make folder for set
   const setId = set.card_set.set_info.set_id;
   const setFolderPath = path.normalize(`${filePath}/sets/set-${setId}`);
@@ -46,8 +46,12 @@ export default async function saveSet(set: CardAPIObject, filePath: string, opti
   console.log(colors.blue(setId + ":"), colors.bold.magenta("Waiting for jobs to complete."));
   return Promise
     .all(jobs)
-    .then((res) => {
+    .then(() => {
       console.log(colors.blue(setId + ":"), "All jobs completed!");
-      return res;
+      return true;
+    })
+    .catch((err) => {
+      console.log(colors.red(`${setId}:`), err);
+      return false;
     });
 }

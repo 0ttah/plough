@@ -71,7 +71,6 @@ export async function handler(argv: yargs.Arguments) {
   }
 
   const setIds: number[] = argv.s;
-  let transformPlugin: TransformPlugin;
   const artifactAPI = axios.create({
     baseURL: "https://playartifact.com/cardset/",
     method: "get",
@@ -85,20 +84,26 @@ export async function handler(argv: yargs.Arguments) {
     removeFolder(outputPath);
   }
 
+  let transformPlugin: TransformPlugin;
   if (argv.transform) {
     await loadPlugin(path.resolve(argv.transform))
       .then((plugin) => {
         transformPlugin = plugin;
+      })
+      .catch((err) => {
+        process.exit(0);
       });
   }
   // Wait for sets to be downloaded
-  const sets = setIds.map(async (id) => downloadSet(id, artifactAPI, argv, transformPlugin));
+  const sets = setIds.map((id) => downloadSet(id, artifactAPI, argv, transformPlugin));
+
   Promise
     .all(sets)
-    .then((values) => {
+    .then((results) => {
       const msg = "Finished ploughing";
       console.log(msg, emoji.tractor);
-    });
+    },
+    );
 
 }
 

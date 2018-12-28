@@ -14,9 +14,7 @@ export default async function downloadSet(setId: number, api: AxiosInstance, arg
   return await getSetCDN(api, setId)
     .then((cdn) => {
       return getSetJSON(cdn)
-        .then((set) => {
-          saveSet(set, outputPath, options);
-        })
+        .then((set) => saveSet(set, outputPath, options))
         .then((value) => {
           console.log(colors.blue(setId + ":"), `Success! Set #${setId} downloaded.`);
           return value;
