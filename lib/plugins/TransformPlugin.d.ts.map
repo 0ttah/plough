@@ -1,0 +1,1 @@
+{"version":3,"file":"TransformPlugin.d.ts","sourceRoot":"","sources":["../../src/plugins/TransformPlugin.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,IAAI,EAAE,aAAa,EAAE,MAAM,0BAA0B,CAAC;AAE/D,8BAAsB,eAAe;IAC5B,IAAI,EAAE,MAAM,CAAiB;aAEpB,YAAY,CAAC,GAAG,EAAE,aAAa,GAAG,GAAG;aACrC,iBAAiB,CAAC,QAAQ,EAAE,IAAI,GAAG,GAAG;CACvD"}
