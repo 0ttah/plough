@@ -5,7 +5,6 @@ import CardImage from "../../CardImage";
 // Download each card's images
 export async function downloadAllCardsImages(cards: Card[], filePath: string, languageOption: keyof LanguageOptionLargeImage = "default") {
   const promises = cards.map(async (card) => downloadCardImages(card, filePath, languageOption));
-
   return Promise
     .all(promises)
     .then((res) => {
@@ -21,7 +20,6 @@ export async function downloadCardImages(card: Card, folderPath: string, languag
     new CardImage("mini", ".png", card.mini_image.default),
     new CardImage("large", ".png", card.large_image[languageOption]),
   ];
-  console.log(colors.bgRed("URL " + card.large_image[languageOption]));
   if (card.card_type === "Hero") {
     images = images.concat(new CardImage("ingame", ".png", card.ingame_image.default));
   }
