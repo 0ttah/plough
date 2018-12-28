@@ -8,6 +8,7 @@ import { downloadAllCardsImages } from "./downloadImages";
 import SaveSetOptions from "./SaveSetOptions";
 
 export default async function saveSet(set: CardAPIObject, filePath: string, options: SaveSetOptions = new SaveSetOptions()) {
+  console.log("Plugin name", options.transformPlugin.name);
   // Make folder for set
   const setId = set.card_set.set_info.set_id;
   const setFolderPath = path.normalize(`${filePath}/sets/set-${setId}`);
@@ -15,7 +16,8 @@ export default async function saveSet(set: CardAPIObject, filePath: string, opti
   shell.mkdir("-p", setFolderPath);
   console.log(colors.bgRed(options.language));
   // save set & card map files
-  const writeSetFile = writeFile(setFilePath, JSON.stringify(set, undefined, 2), null, () => {
+  const outputSet = options.transformPlugin ? options.transformPlugin.transformSet(set) : set;
+  const writeSetFile = writeFile(setFilePath, JSON.stringify(outputSet, undefined, 2), null, () => {
     console.log(colors.blue(setId + ":"), "Saved set.json");
   });
   const writeFileMap = writeFile(setFolderPath + "/cardmap.json", JSON.stringify(CardFileMap.createMap(set), undefined, 2), null, () => {
@@ -38,7 +40,7 @@ export default async function saveSet(set: CardAPIObject, filePath: string, opti
   }
   if (options.fragmentCards) {
     // Fragment cards
-    const fragmentCardsJob = set.card_set.card_list.map(async (card) => fragmentCard(card, setFolderPath + "/cards", true));
+    const fragmentCardsJob = set.card_set.card_list.map(async (card) => fragmentCard(card, setFolderPath + "/cards", options.transformPlugin));
     jobs = [...jobs, ...fragmentCardsJob];
   }
   // save fragments

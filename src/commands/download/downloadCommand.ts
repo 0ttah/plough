@@ -1,13 +1,17 @@
 import axios from "axios";
 import colors from "colors";
 import { emoji } from "node-emoji";
-import yargs = require("yargs");
+import path from "path";
+import yargs from "yargs";
+import { TransformPlugin } from "../../plugins/TransformPlugin";
 import { removeFolder } from "../utils";
 import downloadSet from "./downloadSet";
 import { transformToJSON } from "./transformToJSON";
 
 export const command = ["download", "d"];
 export const desc = "Download card sets";
+export const example = "HELLO";
+// @TODO Switch to function form builder
 export const builder = {
   output: {
     alias: "o",
@@ -43,6 +47,12 @@ export const builder = {
     default: false,
     describe: "Wipe all files from output directory?",
   },
+  transform: {
+    alias: "t",
+    type: "string",
+    default: false,
+    describe: "Path to transform plugin.",
+  },
   language: {
     alias: "l",
     type: "string",
@@ -51,7 +61,7 @@ export const builder = {
   },
 };
 
-export function handler(argv: yargs.Arguments): void {
+export async function handler(argv: yargs.Arguments) {
   // @TODO Find a option that limits -s to an arroy of numbers so this check can be removed.
   const valid = argv.sets.every((x: any) => typeof x === "number");
   if (!valid) {
@@ -61,6 +71,7 @@ export function handler(argv: yargs.Arguments): void {
   }
 
   const setIds: number[] = argv.s;
+  let transformPlugin: TransformPlugin;
   const artifactAPI = axios.create({
     baseURL: "https://playartifact.com/cardset/",
     method: "get",
@@ -73,8 +84,15 @@ export function handler(argv: yargs.Arguments): void {
     console.log(`Wiping: ${outputPath}`);
     removeFolder(outputPath);
   }
+
+  if (argv.transform) {
+    await loadPlugin(path.resolve(argv.transform))
+      .then((plugin) => {
+        transformPlugin = plugin;
+      });
+  }
   // Wait for sets to be downloaded
-  const sets = setIds.map(async (id) => downloadSet(id, artifactAPI, argv));
+  const sets = setIds.map(async (id) => downloadSet(id, artifactAPI, argv, transformPlugin));
   Promise
     .all(sets)
     .then((values) => {
@@ -82,4 +100,15 @@ export function handler(argv: yargs.Arguments): void {
       console.log(msg, emoji.tractor);
     });
 
+}
+
+async function loadPlugin(pluginPath: string): Promise<TransformPlugin> {
+  try {
+    const plugin = await import(pluginPath);
+    console.log(colors.bgGreen(`Loaded plugin ${pluginPath}`));
+    return new plugin.default();
+  } catch (err) {
+    console.error(colors.bgRed(`Could not load plugin from ${pluginPath}`), err);
+    throw new Error();
+  }
 }

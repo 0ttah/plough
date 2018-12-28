@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import colors from "colors";
 import yargs from "yargs";
-import { transformCommandHandler } from "./commands/transform/index";
 const yargv = yargs
   .commandDir("commands", { recurse: true })
   .demandCommand()

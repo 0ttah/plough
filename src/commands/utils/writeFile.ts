@@ -1,11 +1,13 @@
 import fs from "fs";
-export function writeFile(filePath: string, data: string, options: fs.WriteFileOptions, callback: () => void): Promise<any> {
+export function writeFile(filePath: string, data: string, options: fs.WriteFileOptions, successCallback?: () => void): Promise<any> {
   return new Promise((resolve, reject) => {
     fs.writeFile(filePath, data, options, (err) => {
       if (err) {
         reject(false);
       }
-      callback();
+      if (successCallback) {
+        successCallback();
+      }
       resolve(true);
     });
   });
